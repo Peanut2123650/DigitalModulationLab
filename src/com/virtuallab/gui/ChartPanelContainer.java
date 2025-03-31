@@ -11,19 +11,32 @@ public class ChartPanelContainer extends JPanel {
     private ChartPanel carrierChart;
 
     public ChartPanelContainer() {
-        setLayout(new GridLayout(4, 1)); // Arrange charts in 4x1 grid
-        modulatedChart = new ChartPanel(null); // Will be set later
-        transmittedChart = new ChartPanel(null); // Will be set later
-        demodulatedChart = new ChartPanel(null); // Will be set later
-        carrierChart = new ChartPanel(null); // Will be set later
+        // Set a simple layout like FlowLayout to let components take their natural size
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));  // Center-aligned, with spacing
 
-        // Add the chart panels to the container
+        // Initialize ChartPanels (with null, will be set later)
+        modulatedChart = new ChartPanel(null);
+        transmittedChart = new ChartPanel(null);
+        demodulatedChart = new ChartPanel(null);
+        carrierChart = new ChartPanel(null);
+
+        // Set preferred size for each chart panel to ensure they don't shrink
+        int graphWidth = 800;  // Width of each graph
+        int graphHeight = 300; // Height of each graph
+
+        modulatedChart.setPreferredSize(new Dimension(graphWidth, graphHeight));
+        transmittedChart.setPreferredSize(new Dimension(graphWidth, graphHeight));
+        demodulatedChart.setPreferredSize(new Dimension(graphWidth, graphHeight));
+        carrierChart.setPreferredSize(new Dimension(graphWidth, graphHeight));
+
+        // Add chart panels to container
         add(transmittedChart);
         add(carrierChart);
         add(modulatedChart);
         add(demodulatedChart);
     }
 
+    // Getter methods for accessing the chart panels
     public ChartPanel getModulatedChart() {
         return modulatedChart;
     }

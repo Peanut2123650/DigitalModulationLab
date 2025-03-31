@@ -31,9 +31,11 @@ public class GraphUtils {
         plot.setDomainGridlinePaint(Color.DARK_GRAY);
         plot.setRangeGridlinePaint(Color.DARK_GRAY);
 
+        // Set renderer to use default stroke size and no points on the line
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
         renderer.setSeriesPaint(0, new Color(30, 144, 255)); // Deep blue
-        renderer.setSeriesStroke(0, new BasicStroke(2.0f)); // Thicker lines
+        renderer.setSeriesStroke(0, new BasicStroke(1.0f)); // Default line thickness
+        renderer.setSeriesShapesVisible(0, false); // Disable the points (markers) on the line
         plot.setRenderer(renderer);
 
         return chart;
@@ -58,9 +60,11 @@ public class GraphUtils {
         plot.setDomainGridlinePaint(Color.DARK_GRAY);
         plot.setRangeGridlinePaint(Color.DARK_GRAY);
 
+        // Set renderer to use default stroke size and no points on the step chart
         XYStepRenderer renderer = new XYStepRenderer();
         renderer.setSeriesPaint(0, new Color(255, 69, 0)); // Bright red for contrast
-        renderer.setSeriesStroke(0, new BasicStroke(2.0f));
+        renderer.setSeriesStroke(0, new BasicStroke(1.0f)); // Default line thickness
+        renderer.setSeriesShapesVisible(0, false); // Disable the points (markers) on the step chart
         plot.setRenderer(renderer);
 
         return chart;

@@ -7,7 +7,7 @@ public class LaboratoryGUI extends JFrame {
     public LaboratoryGUI() {
         setTitle("Digital Modulation Lab");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(900, 600);
+        setSize(1200, 800);  // Ensure the window is large enough to avoid squeezing
         setLayout(new BorderLayout());
 
         // Create panels
@@ -16,9 +16,13 @@ public class LaboratoryGUI extends JFrame {
         ChartPanelContainer chartPanel = new ChartPanelContainer();
         JLabel resultLabel = new JLabel(""); // Add missing resultLabel
 
+        // Wrap chart panel in a JScrollPane
+        JScrollPane scrollPane = new JScrollPane(chartPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);  // Enable vertical scrolling
+
         // Add components to frame
         add(inputPanel, BorderLayout.NORTH);
-        add(chartPanel, BorderLayout.CENTER);
+        add(scrollPane, BorderLayout.CENTER);  // Add scrollable chart panel in center
         add(buttonsPanel, BorderLayout.SOUTH);
         add(resultLabel, BorderLayout.WEST); // Optional placement
 
@@ -42,12 +46,10 @@ public class LaboratoryGUI extends JFrame {
                 this
         );
 
-
         setVisible(true);
     }
 
     public static void main(String[] args) {
-
         SwingUtilities.invokeLater(LaboratoryGUI::new);
     }
 }
