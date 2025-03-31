@@ -95,6 +95,24 @@ Here's the updated project report reflecting the additional features:
    - The system successfully stores and retrieves experiment data from the MySQL database.
    - **Screenshots**:  
      (Include relevant screenshots of the GUI showing the input fields, waveform displays, and past experiment results stored in the database, along with quiz scores).
+     login page:
+     ![login](https://github.com/user-attachments/assets/14bca168-de28-4195-a66f-ce29a5444012)
+
+      main menu:
+     ![main_menu](https://github.com/user-attachments/assets/a11e4fe5-b49c-471c-ac8d-7a398fe55a02)
+
+      Digital modulation techniques lab:
+     ![Digital_Modulation_Laboratory](https://github.com/user-attachments/assets/14b45dc8-451e-49f7-9d11-a12e0d2f1f2a)
+
+     Past experiments page:
+     ![past_experiments](https://github.com/user-attachments/assets/59ab8abf-3871-40e1-b994-8c8230b181d6)
+
+      Quiz and tutorial:
+     ![Quiz_page](https://github.com/user-attachments/assets/c4f14fd6-4365-4677-ab64-8ec05b35a945)
+      ![Tutorial](https://github.com/user-attachments/assets/184cc471-c6e8-4099-b510-4c6409cb404e)
+
+     Quiz results:
+     ![Quiz_scores](https://github.com/user-attachments/assets/4c913926-2e93-4193-84fa-01cc947f9591)
 
 ---
 
