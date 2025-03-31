@@ -20,6 +20,10 @@ public class LaboratoryGUI extends JFrame {
         JScrollPane scrollPane = new JScrollPane(chartPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);  // Enable vertical scrolling
 
+        // Increase scrolling speed
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);  // Adjust this value as needed
+
+
         // Add components to frame
         add(inputPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);  // Add scrollable chart panel in center

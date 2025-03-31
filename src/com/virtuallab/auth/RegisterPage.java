@@ -36,7 +36,6 @@ public class RegisterPage {
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         titleLabel.setForeground(pureWhite);
 
-        // Username Field
         userField = new JTextField();
         userField.setBounds(50, 80, 300, 40);
         userField.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -44,7 +43,6 @@ public class RegisterPage {
         userField.setForeground(Color.BLACK);
         userField.setBorder(BorderFactory.createLineBorder(charcoalGray));
 
-        // Password Field
         passField = new JPasswordField();
         passField.setBounds(50, 140, 300, 40);
         passField.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -52,7 +50,6 @@ public class RegisterPage {
         passField.setForeground(Color.BLACK);
         passField.setBorder(BorderFactory.createLineBorder(charcoalGray));
 
-        // Register Button
         registerButton = new JButton("Register");
         registerButton.setBounds(50, 200, 130, 40);
         registerButton.setBackground(lightGray);
@@ -61,7 +58,6 @@ public class RegisterPage {
         registerButton.setBorder(BorderFactory.createLineBorder(charcoalGray));
         registerButton.addActionListener(e -> registerUser());
 
-        // Back Button
         backButton = new JButton("Back to Login");
         backButton.setBounds(220, 200, 130, 40);
         backButton.setBackground(lightGray);

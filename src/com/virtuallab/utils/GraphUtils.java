@@ -25,17 +25,15 @@ public class GraphUtils {
                 dataset, PlotOrientation.VERTICAL, false, true, false
         );
 
-        // Custom styling
         XYPlot plot = chart.getXYPlot();
-        plot.setBackgroundPaint(new Color(230, 230, 230));  // Light gray background
+        plot.setBackgroundPaint(new Color(230, 230, 230));
         plot.setDomainGridlinePaint(Color.DARK_GRAY);
         plot.setRangeGridlinePaint(Color.DARK_GRAY);
 
-        // Set renderer to use default stroke size and no points on the line
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-        renderer.setSeriesPaint(0, new Color(30, 144, 255)); // Deep blue
-        renderer.setSeriesStroke(0, new BasicStroke(1.0f)); // Default line thickness
-        renderer.setSeriesShapesVisible(0, false); // Disable the points (markers) on the line
+        renderer.setSeriesPaint(0, new Color(30, 144, 255));
+        renderer.setSeriesStroke(0, new BasicStroke(1.0f));
+        renderer.setSeriesShapesVisible(0, false);
         plot.setRenderer(renderer);
 
         return chart;
@@ -54,17 +52,15 @@ public class GraphUtils {
                 dataset, PlotOrientation.VERTICAL, false, true, false
         );
 
-        // Custom styling
         XYPlot plot = chart.getXYPlot();
         plot.setBackgroundPaint(new Color(230, 230, 230));
         plot.setDomainGridlinePaint(Color.DARK_GRAY);
         plot.setRangeGridlinePaint(Color.DARK_GRAY);
 
-        // Set renderer to use default stroke size and no points on the step chart
         XYStepRenderer renderer = new XYStepRenderer();
-        renderer.setSeriesPaint(0, new Color(255, 69, 0)); // Bright red for contrast
-        renderer.setSeriesStroke(0, new BasicStroke(1.0f)); // Default line thickness
-        renderer.setSeriesShapesVisible(0, false); // Disable the points (markers) on the step chart
+        renderer.setSeriesPaint(0, new Color(255, 69, 0));
+        renderer.setSeriesStroke(0, new BasicStroke(1.0f));
+        renderer.setSeriesShapesVisible(0, false);
         plot.setRenderer(renderer);
 
         return chart;

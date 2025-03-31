@@ -13,9 +13,8 @@ public class QuizPage extends JFrame {
     private ButtonGroup optionGroup;
     private JButton nextButton, backButton;
 
-    private final int userId = 1; // Placeholder user ID until authentication is added
+    private final int userId = 1;
 
-    // Updated color palette
     private final Color bgColor = new Color(21, 43, 89);
     private final Color cardColor = new Color(50, 60, 80);
     private final Color textColor = Color.WHITE;
@@ -31,7 +30,6 @@ public class QuizPage extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Header Panel
         JPanel headerPanel = new JPanel(new BorderLayout());
         JLabel titleLabel = new JLabel("Digital Modulation Quiz", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 22));
@@ -41,19 +39,16 @@ public class QuizPage extends JFrame {
         headerPanel.add(titleLabel, BorderLayout.CENTER);
         add(headerPanel, BorderLayout.NORTH);
 
-        // Main Panel
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
         mainPanel.setBackground(bgColor);
 
-        // Question Display
         questionLabel = new JLabel("Question", SwingConstants.CENTER);
         questionLabel.setFont(new Font("Arial", Font.BOLD, 18));
         questionLabel.setForeground(textColor);
         questionLabel.setPreferredSize(new Dimension(getWidth(), 60));
         mainPanel.add(questionLabel, BorderLayout.NORTH);
 
-        // Options Panel
         JPanel optionsPanel = new JPanel(new GridLayout(4, 1, 10, 10));
         optionsPanel.setBackground(bgColor);
         optionButtons = new JRadioButton[4];
@@ -71,22 +66,18 @@ public class QuizPage extends JFrame {
         mainPanel.add(optionsPanel, BorderLayout.CENTER);
         add(mainPanel, BorderLayout.CENTER);
 
-        // Bottom Panel (Navigation)
         JPanel bottomPanel = new JPanel(new BorderLayout());
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 40, 20, 40));
         bottomPanel.setBackground(bgColor);
 
-        // Progress Label
         progressLabel = new JLabel("Question 1 of 10", SwingConstants.CENTER);
         progressLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         progressLabel.setForeground(textColor);
         bottomPanel.add(progressLabel, BorderLayout.NORTH);
 
-        // Buttons Panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         buttonPanel.setBackground(bgColor);
 
-        // Back Button with Confirmation
         backButton = new JButton("⬅ Back to Main Menu");
         styleButton(backButton, dangerColor);
         backButton.addActionListener(e -> {
@@ -100,7 +91,6 @@ public class QuizPage extends JFrame {
             }
         });
 
-        // Next Button
         nextButton = new JButton("Next ➡");
         styleButton(nextButton, buttonColor);
         nextButton.addActionListener(new NextButtonListener());
@@ -120,7 +110,6 @@ public class QuizPage extends JFrame {
             questionLabel.setText(quizManager.getCurrentQuestion());
             String[] options = quizManager.getCurrentOptions();
 
-            // Reset selection and set new options
             optionGroup.clearSelection();
             for (int i = 0; i < optionButtons.length; i++) {
                 optionButtons[i].setText(options[i]);
@@ -162,7 +151,6 @@ public class QuizPage extends JFrame {
         }
     }
 
-    // Button styling
     private void styleButton(JButton button, Color color) {
         button.setFont(new Font("Arial", Font.BOLD, 16));
         button.setBackground(color);

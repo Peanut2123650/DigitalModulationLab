@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 public class SignalProcessor {
 
-    // Convert ASCII text to binary bitstream
     public static String asciiToBinary(String text) {
         StringBuilder binary = new StringBuilder();
         for (char c : text.toCharArray()) {
@@ -14,7 +13,6 @@ public class SignalProcessor {
         return binary.toString();
     }
 
-    // Convert binary bitstream to ASCII text
     public static String binaryToAscii(String bitstream) {
         StringBuilder text = new StringBuilder();
         for (int i = 0; i < bitstream.length(); i += 8) {
@@ -35,7 +33,6 @@ public class SignalProcessor {
         return waveform;
     }
 
-    // Generates a sine wave as the carrier signal
     public static double[] generateCarrierWaveform(double frequency, double amplitude, int fs, double tb, int numBits) {
         int numSamples = (int) (fs * tb * numBits);
         double[] carrierSignal = new double[numSamples];

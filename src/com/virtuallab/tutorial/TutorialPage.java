@@ -11,7 +11,6 @@ public class TutorialPage extends JFrame {
         setLocationRelativeTo(null);
         getContentPane().setBackground(UIUtils.BG_COLOR);
 
-        // Add panels to frame
         add(new TutorialHeaderPanel(this), BorderLayout.NORTH);
         add(new TutorialContentPanel(), BorderLayout.CENTER);
     }

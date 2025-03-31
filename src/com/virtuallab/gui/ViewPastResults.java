@@ -18,7 +18,6 @@ public class ViewPastResults extends JFrame {
     public ViewPastResults() {
         int userId = UserSession.getUserId();
 
-        // Check if user is logged in
         if (userId == -1) {
             JOptionPane.showMessageDialog(this, "❌ No user logged in!", "Error", JOptionPane.ERROR_MESSAGE);
             dispose();
@@ -31,7 +30,6 @@ public class ViewPastResults extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Table Model
         String[] columnNames = {"Score", "Total Questions", "Result"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
         resultsTable = new JTable(tableModel);
@@ -39,11 +37,9 @@ public class ViewPastResults extends JFrame {
         resultsTable.setRowHeight(25);
         loadQuizResults(tableModel, userId);
 
-        // Scroll Pane
         JScrollPane scrollPane = new JScrollPane(resultsTable);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Back Button
         backButton = new JButton("⬅ Back to Main Menu");
         backButton.setFont(new Font("Arial", Font.BOLD, 14));
         backButton.addActionListener(e -> {

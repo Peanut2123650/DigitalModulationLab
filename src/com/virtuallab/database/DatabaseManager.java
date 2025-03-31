@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DatabaseManager {
     private static final String URL = "jdbc:mysql://localhost:3306/virtuallab";
     private static final String USER = "root";
-    private static final String PASSWORD = "Pr@12776";
+    private static final String PASSWORD = "Divyanshu123@#";
 
     static {
         try {

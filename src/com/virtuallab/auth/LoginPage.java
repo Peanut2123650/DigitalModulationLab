@@ -37,7 +37,6 @@ public class LoginPage {
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         titleLabel.setForeground(pureWhite);
 
-        // Username Field
         userField = new JTextField();
         userField.setBounds(50, 80, 300, 40);
         userField.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -45,7 +44,6 @@ public class LoginPage {
         userField.setForeground(Color.BLACK);
         userField.setBorder(BorderFactory.createLineBorder(charcoalGray));
 
-        // Password Field
         passField = new JPasswordField();
         passField.setBounds(50, 140, 300, 40);
         passField.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -53,7 +51,6 @@ public class LoginPage {
         passField.setForeground(Color.BLACK);
         passField.setBorder(BorderFactory.createLineBorder(charcoalGray));
 
-        // Login Button
         loginButton = new JButton("Login");
         loginButton.setBounds(50, 200, 130, 40);
         loginButton.setBackground(lightGray);
@@ -62,7 +59,6 @@ public class LoginPage {
         loginButton.setBorder(BorderFactory.createLineBorder(charcoalGray));
         loginButton.addActionListener(e -> authenticateUser());
 
-        // Register Button
         registerButton = new JButton("Register");
         registerButton.setBounds(220, 200, 130, 40);
         registerButton.setBackground(lightGray);
@@ -93,7 +89,6 @@ public class LoginPage {
         if (userId != -1) {
             JOptionPane.showMessageDialog(frame, "Login Successful!");
 
-            // Store user ID in session
             UserSession.setUserId(userId);
             System.out.println("User ID after login: " + userId); // Debug log
 

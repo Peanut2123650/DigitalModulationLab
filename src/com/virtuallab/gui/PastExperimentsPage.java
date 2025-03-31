@@ -25,7 +25,6 @@ public class PastExperimentsPage extends JFrame {
         int userId = UserSession.getUserId();
         System.out.println("User ID in PastExperimentsPage: " + userId); // Debug log
 
-        // Check if user is logged in
         if (userId == -1) {
             JOptionPane.showMessageDialog(this, "❌ No user logged in!", "Error", JOptionPane.ERROR_MESSAGE);
             dispose(); // Close the window if no user is logged in
@@ -39,13 +38,11 @@ public class PastExperimentsPage extends JFrame {
         getContentPane().setBackground(bgColor);
         setLocationRelativeTo(null);
 
-        // 🔷 Header
         JLabel titleLabel = new JLabel("Past Experiments", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setBorder(new EmptyBorder(15, 0, 15, 0));
 
-        // 🔹 Experiment List Panel
         JPanel listPanel = new JPanel(new BorderLayout());
         listPanel.setBackground(bgColor);
         listPanel.setBorder(new EmptyBorder(10, 15, 10, 15));
@@ -63,7 +60,6 @@ public class PastExperimentsPage extends JFrame {
         scrollPane.setBorder(BorderFactory.createTitledBorder("Experiments"));
         listPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // 🔹 Experiment Details Panel
         experimentDetails = new JTextArea();
         experimentDetails.setFont(new Font("Arial", Font.PLAIN, 14));
         experimentDetails.setEditable(false);
@@ -77,7 +73,6 @@ public class PastExperimentsPage extends JFrame {
         detailsScrollPane.setBorder(BorderFactory.createTitledBorder("Experiment Details"));
         detailsScrollPane.setPreferredSize(new Dimension(400, 250));
 
-        // 🔹 Buttons Panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         buttonPanel.setBackground(bgColor);
 
@@ -104,17 +99,14 @@ public class PastExperimentsPage extends JFrame {
         buttonPanel.add(viewDetailsButton);
         buttonPanel.add(backButton);
 
-        // 🔹 Load Experiments from DB
         loadExperiments(userId);
 
-        // Layout Setup
         add(titleLabel, BorderLayout.NORTH);
         add(listPanel, BorderLayout.WEST);
         add(detailsScrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    // ✅ Load Experiments into List, now filters by userId
     private void loadExperiments(int userId) {
         try {
             ExperimentDAO dao = new ExperimentDAO();
@@ -129,7 +121,6 @@ public class PastExperimentsPage extends JFrame {
         }
     }
 
-    // ✅ Display Details in Text Area with Better Formatting
     private void displayExperimentDetails(String selectedExperiment) {
         try {
             int experimentId = Integer.parseInt(selectedExperiment.split(" - ")[0]);
@@ -157,7 +148,6 @@ public class PastExperimentsPage extends JFrame {
         }
     }
 
-    // ✅ Button Styling
     private void styleButton(JButton button) {
         button.setFont(new Font("Arial", Font.BOLD, 14));
         button.setBackground(buttonColor);
@@ -166,7 +156,6 @@ public class PastExperimentsPage extends JFrame {
         button.setBorder(BorderFactory.createEmptyBorder(8, 18, 8, 18));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Hover effect
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(hoverColor);
@@ -177,7 +166,6 @@ public class PastExperimentsPage extends JFrame {
         });
     }
 
-    // ✅ Main Method (optional)
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new PastExperimentsPage().setVisible(true));  // Fetches userId from session
     }

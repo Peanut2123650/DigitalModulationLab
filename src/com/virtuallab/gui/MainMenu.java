@@ -52,7 +52,6 @@ public class MainMenu extends JFrame {
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Create and add buttons
         gbc.gridy = 0;
         contentPanel.add(createMenuButton("📘 Tutorials", e -> {
             dispose();
@@ -96,12 +95,11 @@ public class MainMenu extends JFrame {
 
         gbc.gridy = 5;
         contentPanel.add(createMenuButton("🚪 Logout", e -> {
-            UserSession.clearSession(); // Clear session
-            dispose(); // Close MainMenu
-            new com.virtuallab.auth.LoginPage();    // Open login page
+            UserSession.clearSession();
+            dispose();
+            new com.virtuallab.auth.LoginPage();
         }), gbc);
 
-        // Add panels to frame
         add(headerPanel, BorderLayout.NORTH);
         add(contentPanel, BorderLayout.CENTER);
 
@@ -118,7 +116,6 @@ public class MainMenu extends JFrame {
         button.setPreferredSize(new Dimension(300, 60));
         button.addActionListener(action);
 
-        // Hover effects
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {

@@ -18,24 +18,20 @@ public class QuizManager {
         score = 0;
     }
 
-    // Checks if more questions are available
     public boolean hasMoreQuestions() {
         return currentQuestionIndex < selectedQuestions.size();
     }
 
-    // Gets the current question
     public String getCurrentQuestion() {
         if (!hasMoreQuestions()) return "";
         return QuizData.getQuestion(selectedQuestions.get(currentQuestionIndex));
     }
 
-    // Gets the options for the current question
     public String[] getCurrentOptions() {
         if (!hasMoreQuestions()) return new String[]{};
         return QuizData.getOptions(selectedQuestions.get(currentQuestionIndex));
     }
 
-    // Checks the selected answer and updates the score
     public boolean checkAnswer(int selectedOption) {
         if (!hasMoreQuestions()) return false;
 
@@ -46,7 +42,7 @@ public class QuizManager {
             score++;
         }
 
-        currentQuestionIndex++; // Move to the next question
+        currentQuestionIndex++;
         return isCorrect;
     }
 
@@ -62,7 +58,6 @@ public class QuizManager {
         return totalQuestions;
     }
 
-    // Generates a result message based on score
     public String getResultMessage() {
         double percentage = (double) score / totalQuestions;
         if (percentage >= 0.8) return "Excellent!";
@@ -71,7 +66,6 @@ public class QuizManager {
         return "Keep practicing!";
     }
 
-    // Saves the quiz result in the database
     public void saveQuizResult() {
         int userId = UserSession.getUserId(); // Get logged-in user
         if (userId == -1) {
