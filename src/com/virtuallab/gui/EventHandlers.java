@@ -23,6 +23,16 @@ public class EventHandlers {
                          ChartPanel modulatedGraph, ChartPanel transmittedGraph, ChartPanel demodulatedGraph,
                          ChartPanel carrierGraph, JLabel resultLabel, JButton backButton, JFrame labFrame) {
 
+        //For back button
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                labFrame.dispose(); // Close the lab window
+                SwingUtilities.invokeLater(() -> new MainMenu().setVisible(true)); // Open com.virtuallab.Main Menu
+            }
+        });
+
+
         // Initialize the input fields and buttons
         this.textInput = textInput;
         this.wInput = wInput; // carrier frequency
