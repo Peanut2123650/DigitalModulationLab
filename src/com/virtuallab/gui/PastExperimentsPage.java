@@ -1,5 +1,6 @@
 package com.virtuallab.gui;
 
+import com.virtuallab.auth.UserSession;
 import com.virtuallab.database.Experiment;
 import com.virtuallab.database.ExperimentDAO;
 
@@ -20,11 +21,16 @@ public class PastExperimentsPage extends JFrame {
     private DefaultListModel<String> listModel;
     private JTextArea experimentDetails;
 
-    private int userId; // Add userId field to filter experiments
+    public PastExperimentsPage() {
+        int userId = UserSession.getUserId();
+        System.out.println("User ID in PastExperimentsPage: " + userId); // Debug log
 
-    // Constructor now accepts userId
-    public PastExperimentsPage(int userId) {
-        this.userId = userId; // Initialize userId
+        // Check if user is logged in
+        if (userId == -1) {
+            JOptionPane.showMessageDialog(this, "❌ No user logged in!", "Error", JOptionPane.ERROR_MESSAGE);
+            dispose(); // Close the window if no user is logged in
+            return;
+        }
 
         setTitle("Past Experiments");
         setSize(850, 600);
@@ -99,7 +105,7 @@ public class PastExperimentsPage extends JFrame {
         buttonPanel.add(backButton);
 
         // 🔹 Load Experiments from DB
-        loadExperiments();
+        loadExperiments(userId);
 
         // Layout Setup
         add(titleLabel, BorderLayout.NORTH);
@@ -109,8 +115,7 @@ public class PastExperimentsPage extends JFrame {
     }
 
     // ✅ Load Experiments into List, now filters by userId
-    // ✅ Load Experiments into List, now filters by userId
-    private void loadExperiments() {
+    private void loadExperiments(int userId) {
         try {
             ExperimentDAO dao = new ExperimentDAO();
             List<Experiment> experiments = dao.getExperimentsByUserId(userId); // Fetch all experiments for the user
@@ -123,8 +128,6 @@ public class PastExperimentsPage extends JFrame {
             JOptionPane.showMessageDialog(this, "Error loading experiments!", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
-
 
     // ✅ Display Details in Text Area with Better Formatting
     private void displayExperimentDetails(String selectedExperiment) {
@@ -154,8 +157,6 @@ public class PastExperimentsPage extends JFrame {
         }
     }
 
-
-
     // ✅ Button Styling
     private void styleButton(JButton button) {
         button.setFont(new Font("Arial", Font.BOLD, 14));
@@ -178,6 +179,6 @@ public class PastExperimentsPage extends JFrame {
 
     // ✅ Main Method (optional)
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new PastExperimentsPage(1).setVisible(true));  // Example userId = 1
+        SwingUtilities.invokeLater(() -> new PastExperimentsPage().setVisible(true));  // Fetches userId from session
     }
 }

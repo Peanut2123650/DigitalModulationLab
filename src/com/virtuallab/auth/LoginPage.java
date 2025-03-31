@@ -95,6 +95,7 @@ public class LoginPage {
 
             // Store user ID in session
             UserSession.setUserId(userId);
+            System.out.println("User ID after login: " + userId); // Debug log
 
             frame.dispose();
             SwingUtilities.invokeLater(() -> new MainMenu().setVisible(true));

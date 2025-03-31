@@ -98,7 +98,7 @@ public class EventHandlers {
             // Store experiment in the database
             ExperimentDAO experimentDAO = new ExperimentDAO();
             int experimentId = experimentDAO.insertExperiment(
-                    "Digital Modulation Experiment", text, w, amplitude, fs, tb, modType, userId
+                    "Digital Modulation Experiment", text, w, amplitude, fs, tb, modType
             );
 
             if (experimentId == -1) {

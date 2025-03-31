@@ -73,7 +73,7 @@ public class MainMenu extends JFrame {
                 return;
             }
             dispose();
-            new PastExperimentsPage(userId).setVisible(true); // Pass userId to PastExperimentsPage
+            new PastExperimentsPage().setVisible(true); // Pass userId to PastExperimentsPage
         }), gbc);
 
 

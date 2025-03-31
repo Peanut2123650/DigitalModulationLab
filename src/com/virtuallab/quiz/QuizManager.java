@@ -10,7 +10,7 @@ public class QuizManager {
     private List<Integer> selectedQuestions;
     private int currentQuestionIndex;
     private int score;
-    private final int totalQuestions = 10; // Fixed number of quiz questions
+    private final int totalQuestions = 5; // Fixed number of quiz questions
 
     public QuizManager() {
         selectedQuestions = QuizData.getRandomQuestions(totalQuestions);

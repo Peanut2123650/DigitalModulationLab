@@ -1,5 +1,7 @@
 package com.virtuallab.database;
 
+import com.virtuallab.auth.UserSession;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +19,21 @@ public class ExperimentDAO {
     }
 
     // ✅ Insert experiment record
-    public int insertExperiment(String experimentName, String inputText, double carrierFrequency, double amplitude, int samplingFrequency, double bitDuration, String modulationType, int userId) {
+    public int insertExperiment(String experimentName, String inputText, double carrierFrequency, double amplitude, int samplingFrequency, double bitDuration, String modulationType) {
+        // Fetch userId from UserSession
+        int userId = UserSession.getUserId();
+
+        // If userId is not valid, return an error
+        if (userId == -1) {
+            System.out.println("Error: No user logged in.");
+            return -1;  // Or handle appropriately (e.g., throw exception or display message)
+        }
+
         String query = "INSERT INTO experiments (user_id, experiment_name, input_text, carrier_frequency, amplitude, sampling_frequency, bit_duration, modulation_type) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement statement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setInt(1, userId);  // Set user_id
+            statement.setInt(1, userId);  // Use userId from UserSession
             statement.setString(2, experimentName);
             statement.setString(3, inputText);
             statement.setDouble(4, carrierFrequency);
@@ -45,6 +56,7 @@ public class ExperimentDAO {
 
         return -1;  // Return -1 if insertion failed
     }
+
 
 
     // ✅ Update demodulated text
