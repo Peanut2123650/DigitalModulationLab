@@ -12,7 +12,7 @@ public class ExperimentDAO {
     // Database credentials (Move these constants to a centralized config file or class if needed)
     private static final String DB_URL = "jdbc:mysql://localhost:3306/virtuallab"; // Example URL
     private static final String DB_USER = "root"; // Database username (change as needed)
-    private static final String DB_PASSWORD = "Pr@12776"; // Database password (change as needed)
+    private static final String DB_PASSWORD = "password"; // Database password (change as needed)
 
     public ExperimentDAO() throws SQLException {
         this.conn = DatabaseManager.getConnection(); // Assuming DatabaseManager handles connection pooling
