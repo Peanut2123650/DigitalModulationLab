@@ -1,32 +1,41 @@
 package com.virtuallab.quiz;
 
+import com.virtuallab.auth.UserSession;
+import com.virtuallab.database.DatabaseManager;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class QuizManager {
     private List<Integer> selectedQuestions;
     private int currentQuestionIndex;
     private int score;
+    private final int totalQuestions = 10; // Fixed number of quiz questions
 
     public QuizManager() {
-        selectedQuestions = QuizData.getRandomQuestions(10);
+        selectedQuestions = QuizData.getRandomQuestions(totalQuestions);
         currentQuestionIndex = 0;
         score = 0;
     }
 
+    // Checks if more questions are available
     public boolean hasMoreQuestions() {
-        return currentQuestionIndex < selectedQuestions.size();     // Ensures it stops at 10
+        return currentQuestionIndex < selectedQuestions.size();
     }
 
+    // Gets the current question
     public String getCurrentQuestion() {
         if (!hasMoreQuestions()) return "";
         return QuizData.getQuestion(selectedQuestions.get(currentQuestionIndex));
     }
 
+    // Gets the options for the current question
     public String[] getCurrentOptions() {
         if (!hasMoreQuestions()) return new String[]{};
         return QuizData.getOptions(selectedQuestions.get(currentQuestionIndex));
     }
 
+    // Checks the selected answer and updates the score
     public boolean checkAnswer(int selectedOption) {
         if (!hasMoreQuestions()) return false;
 
@@ -37,7 +46,7 @@ public class QuizManager {
             score++;
         }
 
-        currentQuestionIndex++; // Move to next question
+        currentQuestionIndex++; // Move to the next question
         return isCorrect;
     }
 
@@ -50,14 +59,64 @@ public class QuizManager {
     }
 
     public int getTotalQuestions() {
-        return selectedQuestions.size();
+        return totalQuestions;
     }
 
+    // Generates a result message based on score
     public String getResultMessage() {
-        double percentage = (double) score / getTotalQuestions();
-        if (percentage >= 0.8) return "Excellent work! You really know your modulation techniques!";
-        if (percentage >= 0.6) return "Good job! You have a solid understanding.";
-        if (percentage >= 0.4) return "Not bad! Review the tutorials to improve.";
-        return "Keep practicing! Try the tutorials first next time.";
+        double percentage = (double) score / totalQuestions;
+        if (percentage >= 0.8) return "Excellent!";
+        if (percentage >= 0.6) return "Good job!";
+        if (percentage >= 0.4) return "Needs improvement.";
+        return "Keep practicing!";
+    }
+
+    // Saves the quiz result in the database
+    public void saveQuizResult() {
+        int userId = UserSession.getUserId(); // Get logged-in user
+        if (userId == -1) {
+            System.err.println("❌ No user logged in. Cannot save quiz results.");
+            return;
+        }
+
+        String query = "INSERT INTO quiz_results (user_id, score, total_questions, result_message) VALUES (?, ?, ?, ?)";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, userId);
+            stmt.setInt(2, score);
+            stmt.setInt(3, getTotalQuestions());
+            stmt.setString(4, getResultMessage());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("❌ Error saving quiz result: " + e.getMessage());
+        }
+    }
+
+
+    // Retrieves past quiz results for a user
+    public static List<String> retrievePastResults(int userId) {
+        List<String> results = new ArrayList<>();
+        String query = "SELECT quiz_date, score FROM quiz_results WHERE user_id = ? ORDER BY quiz_date DESC";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String date = rs.getString("quiz_date");
+                int score = rs.getInt("score");
+                results.add(date + " - Score: " + score);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("❌ Error retrieving past results: " + e.getMessage());
+        }
+
+        return results;
     }
 }

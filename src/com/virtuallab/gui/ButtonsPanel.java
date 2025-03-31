@@ -14,7 +14,7 @@ public class ButtonsPanel extends JPanel {
         resultButton = createButton("Show Result");
         resetButton = createButton("Reset");
         demodulateButton = createButton("Demodulate");
-        backButton = createButton("Back to Main Menu"); // Back button added
+        backButton = createButton("Back to com.virtuallab.Main Menu"); // Back button added
 
         add(resultButton);
         add(resetButton);

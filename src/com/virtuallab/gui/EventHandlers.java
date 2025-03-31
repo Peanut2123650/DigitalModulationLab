@@ -29,7 +29,7 @@ public class EventHandlers {
             @Override
             public void actionPerformed(ActionEvent e) {
                 labFrame.dispose(); // Close the lab window
-                SwingUtilities.invokeLater(() -> new MainMenu().setVisible(true)); // Open Main Menu
+                SwingUtilities.invokeLater(() -> new MainMenu().setVisible(true)); // Open com.virtuallab.Main Menu
             }
         });
         this.textInput = textInput;
@@ -58,28 +58,28 @@ public class EventHandlers {
     private void performModulation() {
         try {
             // Get input values
-            String text = textInput.getText();  //to get the input text
-            double w = Double.parseDouble(wInput.getText());    // to get the carrier frequency
-            int fs = Integer.parseInt(fsInput.getText());   // to get the sampling frequency
-            double amplitude = Double.parseDouble(amplitudeInput.getText());  // Get amplitude from user input
-            double tb = Double.parseDouble(tbInput.getText());  // to get the bit duration
-            String modType = (String) modulationType.getSelectedItem(); // to get the modulation type
+            String text = textInput.getText();
+            double w = Double.parseDouble(wInput.getText());
+            int fs = Integer.parseInt(fsInput.getText());
+            double amplitude = Double.parseDouble(amplitudeInput.getText());
+            double tb = Double.parseDouble(tbInput.getText());
+            String modType = (String) modulationType.getSelectedItem();
 
             // Validate input values
             if (w < 50 || w > 100) {
                 JOptionPane.showMessageDialog(null, "Error: Carrier frequency must be between 50 and 100 Hz.");
-                return;  // Exit the function if the frequency is out of range
+                return;
             }
 
             if (amplitude < 1 || amplitude > 5) {
                 JOptionPane.showMessageDialog(null, "Error: Amplitude must be between 1 and 5.");
-                return;  // Exit the function if the amplitude is out of range
+                return;
             }
 
             // Convert text to binary bitstream
             String bitstream = SignalProcessor.asciiToBinary(text);
 
-            // Perform modulation (but do NOT store it)
+            // Perform modulation
             double[] modulatedSignal = ModulationProcessor.modulate(bitstream, modType, w, tb, fs);
 
             if (modulatedSignal == null || modulatedSignal.length == 0) {
@@ -92,11 +92,13 @@ public class EventHandlers {
             modulatedGraph.revalidate();
             modulatedGraph.repaint();
 
-            // Store only parameters in the database
+            // Get the logged-in user ID (replace this with actual user ID if needed)
+            int userId = 1;  // For testing purposes, replace this with the actual logged-in user ID
+
+            // Store experiment in the database
             ExperimentDAO experimentDAO = new ExperimentDAO();
             int experimentId = experimentDAO.insertExperiment(
-                    //update so that amplitude's value is taken as input as well
-                    "Digital Modulation Experiment", text, w, amplitude, fs, tb, modType, ""
+                    "Digital Modulation Experiment", text, w, amplitude, fs, tb, modType, userId
             );
 
             if (experimentId == -1) {
@@ -106,6 +108,9 @@ public class EventHandlers {
                 System.out.println("Experiment inserted successfully with ID: " + experimentId);
             }
 
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Error: Please enter valid numeric values.");
+            ex.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
@@ -130,16 +135,21 @@ public class EventHandlers {
 
             // Perform demodulation
             String demodulatedBits = ModulationProcessor.demodulate(modType, carrierFreq, tb, fs);
+            if (demodulatedBits == null || demodulatedBits.isEmpty()) {
+                System.out.println("ERROR: Demodulated bits are empty!");
+                return;
+            }
+
             System.out.println("Demodulated Bits: " + demodulatedBits);
 
             // Convert binary bits to text
             String decodedText = SignalProcessor.binaryToAscii(demodulatedBits);
-            System.out.println("Decoded Text: " + decodedText);
-
             if (decodedText == null || decodedText.isEmpty()) {
                 System.out.println("ERROR: Decoded text is empty!");
                 return;
             }
+
+            System.out.println("Decoded Text: " + decodedText);
 
             // Display demodulated data
             demodulatedGraph.setChart(GraphUtils.createBitChart("Demodulated Bits", demodulatedBits));
@@ -153,8 +163,7 @@ public class EventHandlers {
                 return;
             }
 
-            // ✅ Update the database with the decoded text
-            System.out.println("Updating database with decoded text for experiment ID: " + latestExperimentId);
+            // Update the database with the decoded text
             ExperimentDAO.updateDemodulatedText(latestExperimentId, decodedText);
 
         } catch (Exception e) {
@@ -162,6 +171,7 @@ public class EventHandlers {
             JOptionPane.showMessageDialog(null, "Error in demodulation: " + e.getMessage());
         }
     }
+
 
     private void resetFields() {
         textInput.setText("");

@@ -13,10 +13,20 @@ public class QuizPage extends JFrame {
     private ButtonGroup optionGroup;
     private JButton nextButton, backButton;
 
+    private final int userId = 1; // Placeholder user ID until authentication is added
+
+    // Updated color palette
+    private final Color bgColor = new Color(21, 43, 89);
+    private final Color cardColor = new Color(50, 60, 80);
+    private final Color textColor = Color.WHITE;
+    private final Color buttonColor = new Color(70, 130, 180);
+    private final Color hoverColor = new Color(100, 149, 237);
+    private final Color dangerColor = new Color(200, 50, 50);
+
     public QuizPage() {
         quizManager = new QuizManager();
         setTitle("Quiz - Digital Modulation Lab");
-        setSize(800, 500); // Increased window size for better spacing
+        setSize(800, 500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -25,8 +35,8 @@ public class QuizPage extends JFrame {
         JPanel headerPanel = new JPanel(new BorderLayout());
         JLabel titleLabel = new JLabel("Digital Modulation Quiz", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 22));
-        titleLabel.setForeground(Color.WHITE);
-        headerPanel.setBackground(new Color(70, 130, 180));
+        titleLabel.setForeground(textColor);
+        headerPanel.setBackground(buttonColor);
         headerPanel.setPreferredSize(new Dimension(getWidth(), 60));
         headerPanel.add(titleLabel, BorderLayout.CENTER);
         add(headerPanel, BorderLayout.NORTH);
@@ -34,21 +44,26 @@ public class QuizPage extends JFrame {
         // Main Panel
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
+        mainPanel.setBackground(bgColor);
 
         // Question Display
         questionLabel = new JLabel("Question", SwingConstants.CENTER);
         questionLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        questionLabel.setForeground(textColor);
         questionLabel.setPreferredSize(new Dimension(getWidth(), 60));
         mainPanel.add(questionLabel, BorderLayout.NORTH);
 
         // Options Panel
-        JPanel optionsPanel = new JPanel(new GridLayout(4, 1, 10, 10)); // More spacing
+        JPanel optionsPanel = new JPanel(new GridLayout(4, 1, 10, 10));
+        optionsPanel.setBackground(bgColor);
         optionButtons = new JRadioButton[4];
         optionGroup = new ButtonGroup();
 
         for (int i = 0; i < 4; i++) {
             optionButtons[i] = new JRadioButton();
             optionButtons[i].setFont(new Font("Arial", Font.PLAIN, 16));
+            optionButtons[i].setForeground(textColor);
+            optionButtons[i].setBackground(cardColor);
             optionGroup.add(optionButtons[i]);
             optionsPanel.add(optionButtons[i]);
         }
@@ -59,32 +74,35 @@ public class QuizPage extends JFrame {
         // Bottom Panel (Navigation)
         JPanel bottomPanel = new JPanel(new BorderLayout());
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 40, 20, 40));
+        bottomPanel.setBackground(bgColor);
 
         // Progress Label
         progressLabel = new JLabel("Question 1 of 10", SwingConstants.CENTER);
         progressLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        progressLabel.setForeground(textColor);
         bottomPanel.add(progressLabel, BorderLayout.NORTH);
 
         // Buttons Panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        buttonPanel.setBackground(bgColor);
 
-        // Back Button
-        backButton = new JButton("Back to Main Menu");
-        backButton.setFont(new Font("Arial", Font.BOLD, 14));
-        backButton.setBackground(Color.RED);
-        backButton.setForeground(Color.WHITE);
-        backButton.setFocusPainted(false);
+        // Back Button with Confirmation
+        backButton = new JButton("⬅ Back to Main Menu");
+        styleButton(backButton, dangerColor);
         backButton.addActionListener(e -> {
-            dispose(); // Close the quiz window
-            new MainMenu(); // Open the main menu
+            int confirm = JOptionPane.showConfirmDialog(
+                    this, "Are you sure you want to quit the quiz?", "Confirm Exit",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE
+            );
+            if (confirm == JOptionPane.YES_OPTION) {
+                dispose();
+                new MainMenu().setVisible(true);
+            }
         });
 
         // Next Button
-        nextButton = new JButton("Next");
-        nextButton.setFont(new Font("Arial", Font.BOLD, 14));
-        nextButton.setBackground(new Color(70, 130, 180));
-        nextButton.setForeground(Color.WHITE);
-        nextButton.setFocusPainted(false);
+        nextButton = new JButton("Next ➡");
+        styleButton(nextButton, buttonColor);
         nextButton.addActionListener(new NextButtonListener());
 
         buttonPanel.add(backButton);
@@ -101,10 +119,13 @@ public class QuizPage extends JFrame {
         if (quizManager.hasMoreQuestions()) {
             questionLabel.setText(quizManager.getCurrentQuestion());
             String[] options = quizManager.getCurrentOptions();
+
+            // Reset selection and set new options
+            optionGroup.clearSelection();
             for (int i = 0; i < optionButtons.length; i++) {
                 optionButtons[i].setText(options[i]);
-                optionButtons[i].setSelected(false);
             }
+
             progressLabel.setText("Question " + quizManager.getCurrentQuestionNumber() + " of " + quizManager.getTotalQuestions());
         } else {
             showResult();
@@ -112,12 +133,14 @@ public class QuizPage extends JFrame {
     }
 
     private void showResult() {
+        quizManager.saveQuizResult();   // Save quiz result in the database
+
         JOptionPane.showMessageDialog(this,
                 "Quiz Completed!\nYour Score: " + quizManager.getScore() + "/" + quizManager.getTotalQuestions() +
                         "\n" + quizManager.getResultMessage(),
                 "Quiz Result", JOptionPane.INFORMATION_MESSAGE);
         dispose();
-        new MainMenu(); // Return to Main Menu after quiz completion
+        new MainMenu().setVisible(true);
     }
 
     private class NextButtonListener implements ActionListener {
@@ -137,6 +160,24 @@ public class QuizPage extends JFrame {
             quizManager.checkAnswer(selectedOption);
             loadNextQuestion();
         }
+    }
+
+    // Button styling
+    private void styleButton(JButton button, Color color) {
+        button.setFont(new Font("Arial", Font.BOLD, 16));
+        button.setBackground(color);
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setPreferredSize(new Dimension(200, 40));
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(hoverColor);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(color);
+            }
+        });
     }
 
     public static void main(String[] args) {

@@ -10,7 +10,7 @@ public class TutorialHeaderPanel extends JPanel {
         setBackground(UIUtils.PRIMARY_COLOR);
         setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
 
-        JButton backButton = UIUtils.createStyledButton("← Back to Main Menu", 14, Color.WHITE, UIUtils.PRIMARY_COLOR);
+        JButton backButton = UIUtils.createStyledButton("← Back to com.virtuallab.Main Menu", 14, Color.WHITE, UIUtils.PRIMARY_COLOR);
         backButton.addActionListener(e -> {
             parentFrame.dispose();
             new MainMenu().setVisible(true);
