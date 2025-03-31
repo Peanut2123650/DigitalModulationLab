@@ -1,5 +1,7 @@
 package com.virtuallab.utils;
 
+import java.util.Arrays;
+
 public class SignalProcessor {
 
     // Convert ASCII text to binary bitstream
@@ -21,5 +23,25 @@ public class SignalProcessor {
             text.append((char) charCode);
         }
         return text.toString();
+    }
+
+    public static double[] generateDigitalDataWaveform(String bitstream, int fs, double tb) {
+        int length = bitstream.length();
+        double[] waveform = new double[length * (int) (fs * tb)];
+        for (int i = 0; i < length; i++) {
+            double value = bitstream.charAt(i) == '1' ? 1.0 : 0.0;
+            Arrays.fill(waveform, i * (int) (fs * tb), (i + 1) * (int) (fs * tb), value);
+        }
+        return waveform;
+    }
+
+    // Generates a sine wave as the carrier signal
+    public static double[] generateCarrierWaveform(double frequency, double amplitude, int fs, double tb, int numBits) {
+        int numSamples = (int) (fs * tb * numBits);
+        double[] carrierSignal = new double[numSamples];
+        for (int i = 0; i < numSamples; i++) {
+            carrierSignal[i] = amplitude * Math.sin(2 * Math.PI * frequency * (i / (double) fs));
+        }
+        return carrierSignal;
     }
 }

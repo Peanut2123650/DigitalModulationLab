@@ -1,7 +1,6 @@
 package com.virtuallab.gui;
 
 import com.virtuallab.database.*;
-
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.Arrays;
@@ -14,7 +13,7 @@ public class EventHandlers {
     private JTextField textInput, wInput, fsInput, tbInput, amplitudeInput;
     private JComboBox<String> modulationType;
     private JButton resultButton, resetButton, demodulationButton;
-    private ChartPanel modulatedGraph, transmittedGraph, demodulatedGraph;
+    private ChartPanel modulatedGraph, transmittedGraph, demodulatedGraph, carrierGraph;
     private JLabel resultLabel;
     private int latestExperimentId = -1; // Store the latest experiment ID
 
@@ -22,16 +21,9 @@ public class EventHandlers {
                          JTextField amplitudeInput, JComboBox<String> modulationType,
                          JButton resultButton, JButton resetButton, JButton demodulationButton,
                          ChartPanel modulatedGraph, ChartPanel transmittedGraph, ChartPanel demodulatedGraph,
-                         JLabel resultLabel, JButton backButton, JFrame labFrame) {
+                         ChartPanel carrierGraph, JLabel resultLabel, JButton backButton, JFrame labFrame) {
 
-        //For back button
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                labFrame.dispose(); // Close the lab window
-                SwingUtilities.invokeLater(() -> new MainMenu().setVisible(true)); // Open com.virtuallab.Main Menu
-            }
-        });
+        // Initialize the input fields and buttons
         this.textInput = textInput;
         this.wInput = wInput; // carrier frequency
         this.fsInput = fsInput; // sampling frequency
@@ -44,10 +36,12 @@ public class EventHandlers {
         this.modulatedGraph = modulatedGraph;
         this.transmittedGraph = transmittedGraph;
         this.demodulatedGraph = demodulatedGraph;
+        this.carrierGraph = carrierGraph;  // Store the carrier graph
         this.resultLabel = resultLabel;
 
         attachListeners();
     }
+
 
     private void attachListeners() {
         resultButton.addActionListener(e -> performModulation());
@@ -59,10 +53,10 @@ public class EventHandlers {
         try {
             // Get input values
             String text = textInput.getText();
-            double w = Double.parseDouble(wInput.getText());
-            int fs = Integer.parseInt(fsInput.getText());
+            double w = Double.parseDouble(wInput.getText()); // Carrier frequency
+            int fs = Integer.parseInt(fsInput.getText());   // Sampling frequency
             double amplitude = Double.parseDouble(amplitudeInput.getText());
-            double tb = Double.parseDouble(tbInput.getText());
+            double tb = Double.parseDouble(tbInput.getText()); // Bit duration
             String modType = (String) modulationType.getSelectedItem();
 
             // Validate input values
@@ -79,6 +73,12 @@ public class EventHandlers {
             // Convert text to binary bitstream
             String bitstream = SignalProcessor.asciiToBinary(text);
 
+            // Generate the digital data waveform (for transmitted graph)
+            double[] digitalDataWaveform = SignalProcessor.generateDigitalDataWaveform(bitstream, fs, tb);
+
+            // Generate the carrier signal waveform
+            double[] carrierWaveform = SignalProcessor.generateCarrierWaveform(w, amplitude, fs, tb, bitstream.length());
+
             // Perform modulation
             double[] modulatedSignal = ModulationProcessor.modulate(bitstream, modType, w, tb, fs);
 
@@ -87,13 +87,20 @@ public class EventHandlers {
                 return;
             }
 
-            // Display modulated signal on the graph
+            // ✅ Use createBitChart() for transmitted digital data
+            transmittedGraph.setChart(GraphUtils.createBitChart("Digital Data (Transmitted)", bitstream));
+
+            // ✅ Use createChart() for carrier and modulated signals
+            carrierGraph.setChart(GraphUtils.createChart("Carrier Signal", carrierWaveform));
             modulatedGraph.setChart(GraphUtils.createChart("Modulated Signal", modulatedSignal));
+
+            // Refresh the graphs
+            transmittedGraph.revalidate();
+            transmittedGraph.repaint();
+            carrierGraph.revalidate();
+            carrierGraph.repaint();
             modulatedGraph.revalidate();
             modulatedGraph.repaint();
-
-            // Get the logged-in user ID (replace this with actual user ID if needed)
-            int userId = 1;  // For testing purposes, replace this with the actual logged-in user ID
 
             // Store experiment in the database
             ExperimentDAO experimentDAO = new ExperimentDAO();
@@ -107,6 +114,9 @@ public class EventHandlers {
                 latestExperimentId = experimentId;
                 System.out.println("Experiment inserted successfully with ID: " + experimentId);
             }
+
+            // ✅ Show the bitstream in resultLabel, not the signal
+            resultLabel.setText("Transmitted Bitstream: " + bitstream);
 
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "Error: Please enter valid numeric values.");
@@ -153,9 +163,11 @@ public class EventHandlers {
 
             // Display demodulated data
             demodulatedGraph.setChart(GraphUtils.createBitChart("Demodulated Bits", demodulatedBits));
-            resultLabel.setText("Decoded Text: " + decodedText);
             demodulatedGraph.revalidate();
             demodulatedGraph.repaint();
+
+            // Update the result label with decoded text
+            resultLabel.setText("Decoded Text: " + decodedText);
 
             // Ensure a valid experiment ID was stored
             if (latestExperimentId == -1) {
@@ -171,7 +183,6 @@ public class EventHandlers {
             JOptionPane.showMessageDialog(null, "Error in demodulation: " + e.getMessage());
         }
     }
-
 
     private void resetFields() {
         textInput.setText("");

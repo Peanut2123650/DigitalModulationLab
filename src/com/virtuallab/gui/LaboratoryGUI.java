@@ -24,22 +24,24 @@ public class LaboratoryGUI extends JFrame {
 
         // Attach event handlers
         new EventHandlers(
-                inputPanel.textInput,
-                inputPanel.frequencyInput, // carrier frequency
-                inputPanel.fsInput, // sampling frequency
-                inputPanel.tbInput, // bit duration
+                inputPanel.textInput,       // bitstream (digital data)
+                inputPanel.frequencyInput,  // carrier frequency
+                inputPanel.fsInput,         // sampling frequency
+                inputPanel.tbInput,         // bit duration
                 inputPanel.amplitudeInput,
                 inputPanel.modulationType,
                 buttonsPanel.resultButton,
                 buttonsPanel.resetButton,
                 buttonsPanel.demodulateButton,
-                chartPanel.getModulatedChart(),
-                chartPanel.getTransmittedChart(),
-                chartPanel.getDemodulatedChart(),
-                resultLabel, // Pass resultLabel
+                chartPanel.getModulatedChart(),    // modulated chart
+                chartPanel.getTransmittedChart(), // transmitted chart (digital data waveform)
+                chartPanel.getDemodulatedChart(), // demodulated chart
+                chartPanel.getCarrierChart(),     // carrier signal chart
+                resultLabel,
                 buttonsPanel.backButton,
                 this
         );
+
 
         setVisible(true);
     }

@@ -1,50 +1,42 @@
 package com.virtuallab.gui;
 
+import org.jfree.chart.ChartPanel;
 import javax.swing.*;
 import java.awt.*;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
 
 public class ChartPanelContainer extends JPanel {
-    private ChartPanel modulatedGraph, transmittedGraph, demodulatedGraph;
+    private ChartPanel modulatedChart;
+    private ChartPanel transmittedChart;
+    private ChartPanel demodulatedChart;
+    private ChartPanel carrierChart;
 
     public ChartPanelContainer() {
-        setLayout(new GridLayout(3, 1));
-        setBorder(BorderFactory.createTitledBorder("Waveform Display"));
+        setLayout(new GridLayout(4, 1)); // Arrange charts in 4x1 grid
+        modulatedChart = new ChartPanel(null); // Will be set later
+        transmittedChart = new ChartPanel(null); // Will be set later
+        demodulatedChart = new ChartPanel(null); // Will be set later
+        carrierChart = new ChartPanel(null); // Will be set later
 
-        // Initialize empty charts
-        modulatedGraph = new ChartPanel(null);
-        transmittedGraph = new ChartPanel(null);
-        demodulatedGraph = new ChartPanel(null);
-
-        add(modulatedGraph);
-        add(transmittedGraph);
-        add(demodulatedGraph);
+        // Add the chart panels to the container
+        add(transmittedChart);
+        add(carrierChart);
+        add(modulatedChart);
+        add(demodulatedChart);
     }
 
-    // Setters for ...
-    public void setModulatedChart(JFreeChart chart) {
-        modulatedGraph.setChart(chart);
-    }
-
-    public void setTransmittedChart(JFreeChart chart) {
-        transmittedGraph.setChart(chart);
-    }
-
-    public void setDemodulatedChart(JFreeChart chart) {
-        demodulatedGraph.setChart(chart);
-    }
-
-    // Getters for EventHandlers class
     public ChartPanel getModulatedChart() {
-        return modulatedGraph;
+        return modulatedChart;
     }
 
     public ChartPanel getTransmittedChart() {
-        return transmittedGraph;
+        return transmittedChart;
     }
 
     public ChartPanel getDemodulatedChart() {
-        return demodulatedGraph;
+        return demodulatedChart;
+    }
+
+    public ChartPanel getCarrierChart() {
+        return carrierChart;
     }
 }
